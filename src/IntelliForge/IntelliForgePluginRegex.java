@@ -15,7 +15,7 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         CleanRebuildProject rebuildProject = CleanRebuildProject.INSTANCE;
         ForgeDev.GenPatches patches = new ForgeDev.GenPatches();
         ForgeDev.SetupForge setupForge = new ForgeDev.SetupForge();
-        //BuildProject.BuildtoCurse
+        //  BuildProject.BuildtoCurse
 
         am.registerAction("IntelliForgeAction", firstWorkspace);
         am.registerAction("IntelliForgebuildProject", buildProject);
