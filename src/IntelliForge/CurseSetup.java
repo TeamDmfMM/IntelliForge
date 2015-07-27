@@ -52,6 +52,24 @@ public class CurseSetup extends JDialog {
 
     private void onOK() {
 // add your code here
+        String projectID = textField1.getText();
+        String api_key = String.valueOf(passwordField1.getPassword());
+        String changelog = textArea1.getText();
+        CurseHandler.ReleaseType t;
+        if (alphaRadioButton1.isEnabled()){
+            t = CurseHandler.ReleaseType.ALPHA;
+        }
+        else if (betaRadioButton.isEnabled()){
+            t = CurseHandler.ReleaseType.BETA;
+        }
+        else if (RadioType.isEnabled()){
+            t = CurseHandler.ReleaseType.RELEASE;
+        }
+        else {
+            t = CurseHandler.ReleaseType.RELEASE;
+        }
+
+        CurseHandler.doCurse(api_key, projectID, changelog, t);
         dispose();
     }
 
@@ -60,10 +78,9 @@ public class CurseSetup extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) {
+    public static void show_2(){
         CurseSetup dialog = new CurseSetup();
         dialog.pack();
         dialog.setVisible(true);
-        System.exit(0);
     }
 }

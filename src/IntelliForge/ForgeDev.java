@@ -21,7 +21,9 @@ public class ForgeDev{
         @Override
         public void actionPerformed(AnActionEvent event) {
             String project = event.getData(PlatformDataKeys.PROJECT).getBaseDir().getCanonicalPath();
-            executeCMD(OperatingSystemHelper.systemHelper.getOSexecuteString(), "genPatches", project, OperatingSystemHelper.systemHelper.isWindows());
+
+            ExecuteCommandThread th = new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "genPatches", project, OperatingSystemHelper.systemHelper.isWindows());
+            th.start();
         }
     }
 
@@ -32,7 +34,8 @@ public class ForgeDev{
         @Override
         public void actionPerformed(AnActionEvent event) {
             String project = event.getData(PlatformDataKeys.PROJECT).getBaseDir().getCanonicalPath();
-            executeCMD(OperatingSystemHelper.systemHelper.getOSexecuteString(), "setupForge idea", project, OperatingSystemHelper.systemHelper.isWindows());
+            ExecuteCommandThread th = new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "setupForge idea", project, OperatingSystemHelper.systemHelper.isWindows());
+            th.start();
         }
     }
 

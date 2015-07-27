@@ -20,10 +20,27 @@ public class CleanRebuildProject extends AnAction{
 
     @Override
     public void actionPerformed(AnActionEvent event) {
+
+
+        if (IntelliForgeToolWindow.theToolWindow != null){
+            IntelliForgeToolWindow.theToolWindow.activate(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
+        }
+
         String project = event.getData(PlatformDataKeys.PROJECT).getBaseDir().getCanonicalPath();
-        executeCMD(OperatingSystemHelper.systemHelper.getOSexecuteString(), "clean", project, OperatingSystemHelper.systemHelper.isWindows());
-        executeCMD(OperatingSystemHelper.systemHelper.getOSexecuteString(), "setupDecompWorkspace", project, OperatingSystemHelper.systemHelper.isWindows());
-        executeCMD(OperatingSystemHelper.systemHelper.getOSexecuteString(), "idea", project, OperatingSystemHelper.systemHelper.isWindows());
+
+
+
+        MultipleExecuteCommandThread th = new MultipleExecuteCommandThread(
+                new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "clean", project, OperatingSystemHelper.systemHelper.isWindows()),
+            new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "setupDecompWorkspace", project, OperatingSystemHelper.systemHelper.isWindows()),
+            new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "idea", project, OperatingSystemHelper.systemHelper.isWindows()));
+        th.start();
+
 
     }
 
@@ -37,7 +54,9 @@ public class CleanRebuildProject extends AnAction{
             String line;
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null) {
-                System.out.println(line);
+                if (IntelliForgeToolWindow.theToolWindow != null){
+                    IntelliForgeToolWindow.theTextArea.append(line + "\n");
+                }
             }
             p.waitFor();
             input.close();

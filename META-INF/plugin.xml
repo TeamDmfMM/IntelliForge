@@ -26,6 +26,9 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
+
+    <toolWindow id="intelliforgeoutput" anchor="bottom" factoryClass="IntelliForge.IntelliForgeToolWindow" />
+    
   </extensions>
 
   <application-components>
@@ -45,5 +48,7 @@
       <add-to-group group-id="MainMenu" anchor="last"  />
     </group>
   </actions>
+
+
 
 </idea-plugin>
