@@ -31,7 +31,7 @@ public class CurseGroup extends ActionGroup implements DumbAware{
     public AnAction[] getChildren(AnActionEvent anActionEvent) {
         List<AnAction> actions = new ArrayList<AnAction>();
         actions.add(new BuildProject.BuildtoCurse());
-        actions.add(new ForgeDev.GenPatches());
+        actions.add(new CurseUpdate());
         return actions.toArray(new AnAction[actions.size()]);
     }
 

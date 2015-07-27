@@ -47,8 +47,6 @@ public class BuildProject extends AnAction{
                 }
                 ExecuteCommandThread thread = new ExecuteCommandThread(OperatingSystemHelper.getOSexecuteString(), "build curse", project, OperatingSystemHelper.systemHelper.isWindows());
                 thread.start();
-            } else{
-                CurseSetup.show_2();
             }
 
         }
@@ -60,7 +58,7 @@ public class BuildProject extends AnAction{
                 String line = br.readLine();
 
                 while (line != null) {
-                    if(line.contains("curse"))
+                    if(line.contains("curseforge"))
                         return true;
                     line = br.readLine();
                 }

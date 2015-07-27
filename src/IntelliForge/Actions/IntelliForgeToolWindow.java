@@ -20,7 +20,6 @@ public class IntelliForgeToolWindow implements ToolWindowFactory, DumbAware{
     // IDK why we would need this, but it is here for completeness
     public static JScrollPane theScrollPane;
 
-
     @Override
     public void createToolWindowContent(Project project, ToolWindow toolWindow) {
 
@@ -38,6 +37,7 @@ public class IntelliForgeToolWindow implements ToolWindowFactory, DumbAware{
         theScrollPane = theScrollPane;
 
         theToolWindow = toolWindow;
+        //toolWindow.setTitle("IntelliForge-Terminal");
 
 
 

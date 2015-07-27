@@ -17,6 +17,10 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         ForgeDev.GenPatches patches = new ForgeDev.GenPatches();
         ForgeDev.SetupForge setupForge = new ForgeDev.SetupForge();
         BuildProject.BuildtoCurse buildtoCurse = new BuildProject.BuildtoCurse();
+        CurseUpdate Cupdate = new CurseUpdate();
+
+
+        CurseGroup curse = new CurseGroup();
 
         am.registerAction("IntelliForgeAction", firstWorkspace);
         am.registerAction("IntelliForgebuildProject", buildProject);
@@ -24,6 +28,11 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         am.registerAction("IntelliForgepatches", patches);
         am.registerAction("IntelliForgesetupForge", setupForge);
         am.registerAction("IntelliForgebuildCurse", buildtoCurse);
+        am.registerAction("IntelliForgeCurseUpdate", Cupdate);
+
+
+        am.registerAction("IntelliForgeGroup", curse);
+
 
         DefaultActionGroup windowM = (DefaultActionGroup) am.getAction("IntelliForge.Menu");
         //windowM.addSeparator();
@@ -33,7 +42,8 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         windowM.addSeparator();
 
         windowM.add(buildProject);
-        windowM.add(buildtoCurse);
+        //windowM.add(buildtoCurse);
+        windowM.add(curse);
 
         windowM.addSeparator();
 

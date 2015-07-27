@@ -34,6 +34,10 @@ public class ExecuteCommandThread extends Thread{
 
     private static void executeCMD(String osCMD, String cmd, String FileLoc, boolean windows){
 
+        if (IntelliForgeToolWindow.theToolWindow != null){
+            IntelliForgeToolWindow.theTextArea.append("Running: "+ osCMD + " "+ cmd +"\n");
+            //RED TEXT
+        }
         try {
             Process p;
             if(!windows){
