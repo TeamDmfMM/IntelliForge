@@ -27,7 +27,7 @@
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
 
-    <toolWindow id="intelliforgeoutput" anchor="bottom" factoryClass="IntelliForge.IntelliForgeToolWindow" />
+    <toolWindow id="intelliforgeoutput" anchor="bottom" factoryClass="IntelliForge.Actions.IntelliForgeToolWindow" />
     
   </extensions>
 

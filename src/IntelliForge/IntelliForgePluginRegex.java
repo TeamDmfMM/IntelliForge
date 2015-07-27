@@ -1,5 +1,6 @@
 package IntelliForge;
 
+import IntelliForge.Actions.*;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -27,11 +28,15 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         DefaultActionGroup windowM = (DefaultActionGroup) am.getAction("IntelliForge.Menu");
         //windowM.addSeparator();
         windowM.add(firstWorkspace);
-        windowM.addSeparator();
         windowM.add(rebuildProject);
+
+        windowM.addSeparator();
+
         windowM.add(buildProject);
         windowM.add(buildtoCurse);
+
         windowM.addSeparator();
+
         windowM.add(setupForge);
         windowM.add(patches);
     }

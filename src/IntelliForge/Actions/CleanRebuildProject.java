@@ -1,6 +1,9 @@
-package IntelliForge;
+package IntelliForge.Actions;
 
 
+import IntelliForge.Helper.ExecuteCommandThread;
+import IntelliForge.Helper.MultipleExecuteCommandThread;
+import IntelliForge.Helper.OperatingSystemHelper;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -44,22 +47,4 @@ public class CleanRebuildProject extends AnAction{
 
     }
 
-    private static void executeCMD(String osCMD, String cmd, String FileLoc, boolean windows){
-        try {
-            Process p;
-            if(!windows){
-                Runtime.getRuntime().exec("chmod +x ./gradlew", null, new File(FileLoc));
-            }
-            p =  Runtime.getRuntime().exec(osCMD + " " + cmd, null, new File(FileLoc));
-            String line;
-            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((line = input.readLine()) != null) {
-                if (IntelliForgeToolWindow.theToolWindow != null){
-                    IntelliForgeToolWindow.theTextArea.append(line + "\n");
-                }
-            }
-            p.waitFor();
-            input.close();
-        } catch (IOException | InterruptedException e) {}
-    }
 }

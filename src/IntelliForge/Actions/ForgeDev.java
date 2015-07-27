@@ -1,5 +1,7 @@
-package IntelliForge;
+package IntelliForge.Actions;
 
+import IntelliForge.Helper.ExecuteCommandThread;
+import IntelliForge.Helper.OperatingSystemHelper;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -29,7 +31,7 @@ public class ForgeDev{
 
     public static class SetupForge extends AnAction{
         public SetupForge(){
-            super("Setup Forge Workspace");
+            super("setupForge Workspace");
         }
         @Override
         public void actionPerformed(AnActionEvent event) {
@@ -39,25 +41,4 @@ public class ForgeDev{
         }
     }
 
-
-
-
-
-
-    private static void executeCMD(String osCMD, String cmd, String FileLoc, boolean windows){
-        try {
-            Process p;
-            if(!windows){
-                Runtime.getRuntime().exec("chmod +x ./gradlew", null, new File(FileLoc));
-            }
-            p =  Runtime.getRuntime().exec(osCMD + " " + cmd, null, new File(FileLoc));
-            String line;
-            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((line = input.readLine()) != null) {
-                System.out.println(line);
-            }
-            p.waitFor();
-            input.close();
-        } catch (IOException | InterruptedException e) {}
-    }
 }

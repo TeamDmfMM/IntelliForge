@@ -1,6 +1,4 @@
-package IntelliForge;
-
-import java.util.ArrayList;
+package IntelliForge.Helper;
 
 public class OperatingSystemHelper {
     public static OperatingSystemHelper systemHelper = new OperatingSystemHelper();

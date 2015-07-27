@@ -1,4 +1,6 @@
-package IntelliForge;
+package IntelliForge.Helper;
+
+import IntelliForge.Actions.IntelliForgeToolWindow;
 
 import java.io.BufferedReader;
 import java.io.File;

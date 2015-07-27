@@ -1,4 +1,4 @@
-package IntelliForge;
+package IntelliForge.Actions;
 
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;

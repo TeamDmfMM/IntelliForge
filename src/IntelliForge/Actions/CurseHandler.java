@@ -1,4 +1,4 @@
-package IntelliForge;
+package IntelliForge.Actions;
 
 /**
  * Created by mincrmatt12. Do not copy this or you will have to face

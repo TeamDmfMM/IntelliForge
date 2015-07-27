@@ -1,5 +1,7 @@
 package IntelliForge;
 
+import IntelliForge.Actions.CurseHandler;
+
 import javax.swing.*;
 import java.awt.event.*;
 
