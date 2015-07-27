@@ -1,17 +1,11 @@
 package IntelliForge;
 
-import com.intellij.execution.filters.TextConsoleBuilder;
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
-import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class BuildProject extends AnAction{
@@ -73,10 +67,7 @@ public class BuildProject extends AnAction{
             if(readFile(project)){
                 executeCMD(OperatingSystemHelper.systemHelper.getOSexecuteString(), "build curse", project, OperatingSystemHelper.systemHelper.isWindows());
             } else{
-                ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(event.getData(PlatformDataKeys.PROJECT)).getConsole();
-                Logger LOG = Logger.getInstance("#com.intellij.execution.process.ProcessHandler");
-
-                LOG.debug("HELLOLOLOLO");
+                CurseSetup.show_2();
             }
 
         }

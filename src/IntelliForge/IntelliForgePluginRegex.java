@@ -15,13 +15,14 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         CleanRebuildProject rebuildProject = CleanRebuildProject.INSTANCE;
         ForgeDev.GenPatches patches = new ForgeDev.GenPatches();
         ForgeDev.SetupForge setupForge = new ForgeDev.SetupForge();
-        //BuildProject.BuildtoCurse
+        BuildProject.BuildtoCurse buildtoCurse = new BuildProject.BuildtoCurse();
 
         am.registerAction("IntelliForgeAction", firstWorkspace);
         am.registerAction("IntelliForgebuildProject", buildProject);
         am.registerAction("IntelliForgecleanRebuildProject", rebuildProject);
         am.registerAction("IntelliForgepatches", patches);
         am.registerAction("IntelliForgesetupForge", setupForge);
+        am.registerAction("IntelliForgebuildCurse", buildtoCurse);
 
         DefaultActionGroup windowM = (DefaultActionGroup) am.getAction("IntelliForge.Menu");
         //windowM.addSeparator();
@@ -29,6 +30,7 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         windowM.addSeparator();
         windowM.add(rebuildProject);
         windowM.add(buildProject);
+        windowM.add(buildtoCurse);
         windowM.addSeparator();
         windowM.add(setupForge);
         windowM.add(patches);
