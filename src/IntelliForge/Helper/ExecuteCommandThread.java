@@ -2,6 +2,11 @@ package IntelliForge.Helper;
 
 import IntelliForge.Actions.IntelliForgeToolWindow;
 
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +23,25 @@ public class ExecuteCommandThread extends Thread{
     private final String fileLoc;
     private final boolean windows;
 
+    private static SimpleAttributeSet redunderlined;
+    private static SimpleAttributeSet regualr;
+
+    static {
+
+        SimpleAttributeSet d = new SimpleAttributeSet();
+        StyleConstants.setForeground(d, Color.decode("#0066FF"));
+        StyleConstants.setUnderline(d, true);
+        StyleConstants.setBold(d, true);
+        StyleConstants.setFontFamily(d, "Courier New");
+        StyleConstants.setFontSize(d, 14);
+        redunderlined = d;
+        d = new SimpleAttributeSet();
+        StyleConstants.setFontFamily(d, "Courier New");
+        StyleConstants.setFontSize(d, 14);
+        regualr = d;
+
+    }
+
     public ExecuteCommandThread(String osCMD, String cmd, String FileLoc, boolean windows){
 
         this.osCMD = osCMD;
@@ -32,10 +56,24 @@ public class ExecuteCommandThread extends Thread{
 
     }
 
+    private static void scrollToBottom()
+    {
+        SwingUtilities.invokeLater(
+                new Runnable() {
+                    public void run() {
+                        IntelliForgeToolWindow.theScrollPane.getVerticalScrollBar().setValue(IntelliForgeToolWindow.theScrollPane.getVerticalScrollBar().getMaximum());
+                    }
+                });
+    }
+
     private static void executeCMD(String osCMD, String cmd, String FileLoc, boolean windows){
 
         if (IntelliForgeToolWindow.theToolWindow != null){
-            IntelliForgeToolWindow.theTextArea.append("Running: "+ osCMD + " "+ cmd +"\n");
+            try {
+                IntelliForgeToolWindow.theDocument.insertString(IntelliForgeToolWindow.theDocument.getLength(), FileLoc + "> " + osCMD + " " + cmd + "\n", redunderlined);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
             //RED TEXT
         }
         try {
@@ -48,12 +86,17 @@ public class ExecuteCommandThread extends Thread{
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null) {
                 if (IntelliForgeToolWindow.theToolWindow != null){
-                    IntelliForgeToolWindow.theTextArea.append(line + "\n");
-                    IntelliForgeToolWindow.theTextArea.setCaretPosition(IntelliForgeToolWindow.theTextArea.getDocument().getLength());
+
+
+
+                    IntelliForgeToolWindow.theDocument.insertString(IntelliForgeToolWindow.theDocument.getLength(), line + "\n", regualr);
+                    IntelliForgeToolWindow.theTextPane.setCaretPosition(IntelliForgeToolWindow.theDocument.getLength());
                 }
             }
             p.waitFor();
             input.close();
-        } catch (IOException | InterruptedException e) {}
+        } catch (IOException | InterruptedException e) {} catch (BadLocationException e) {
+            e.printStackTrace();
+        }
     }
 }
