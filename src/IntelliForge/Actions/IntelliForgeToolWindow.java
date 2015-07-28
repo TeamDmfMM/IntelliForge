@@ -6,6 +6,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 
 import javax.swing.*;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 
 /**
@@ -16,7 +17,8 @@ public class IntelliForgeToolWindow implements ToolWindowFactory, DumbAware{
 
     public static ToolWindow theToolWindow;
 
-    public static JTextArea theTextArea;
+    public static JTextPane theTextPane;
+    public static StyledDocument theDocument;
     // IDK why we would need this, but it is here for completeness
     public static JScrollPane theScrollPane;
 
@@ -25,16 +27,17 @@ public class IntelliForgeToolWindow implements ToolWindowFactory, DumbAware{
 
         Component theJContext = toolWindow.getComponent();
 
-        JTextArea textArea = new JTextArea(5, 30);
+        JTextPane textPane = new JTextPane();
 
-        textArea.setEditable(false);
+        textPane.setEditable(false);
 
-        JScrollPane scrollPane = new JScrollPane(textArea);
+        JScrollPane scrollPane = new JScrollPane(textPane);
 
         theJContext.getParent().add(scrollPane);
 
-        theTextArea = textArea;
+        theTextPane = textPane;
         theScrollPane = theScrollPane;
+        theDocument = textPane.getStyledDocument();
 
         theToolWindow = toolWindow;
         //toolWindow.setTitle("IntelliForge-Terminal");
