@@ -5,4 +5,17 @@ package IntelliForge.Helper.ForgeData;
  * our legal team. (dmf444)
  */
 public class BuildData {
+
+    public String downloadLink = "";
+
+    public String version= "";
+
+    public String mcversion;
+
+    public boolean isRec;
+
+    public int bid;
+
+    public boolean isLatest;
+
 }
