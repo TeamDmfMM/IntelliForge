@@ -28,6 +28,7 @@
     <!-- Add your extensions here -->
 
     <toolWindow id="IntelliForge-Terminal" anchor="bottom" factoryClass="IntelliForge.Actions.IntelliForgeToolWindow" />
+    <moduleType id="IntelliForge-Project" implementationClass="IntelliForge.NewForgeMod.NewForgeMod"/>
     
   </extensions>
 
@@ -50,5 +51,7 @@
   </actions>
 
 
+  <module-components>
 
+  </module-components>
 </idea-plugin>

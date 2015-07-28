@@ -1,24 +1,14 @@
 package IntelliForge;
 
-import IntelliForge.Actions.CurseHandler;
-import com.intellij.openapi.project.Project;
-
 import javax.swing.*;
 import java.awt.event.*;
 
-public class CurseSetup extends JDialog {
+public class CurseUpdate extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JLabel APIkey;
-    private JPasswordField passwordField1;
-    private JTextField textField1;
-    private JTextArea textArea1;
-    private JRadioButton RadioType;
-    private JRadioButton betaRadioButton;
-    private JRadioButton alphaRadioButton1;
 
-    public CurseSetup() {
+    public CurseUpdate() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -49,30 +39,10 @@ public class CurseSetup extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-
     }
 
     private void onOK() {
 // add your code here
-        String projectID = textField1.getText();
-        String api_key = String.valueOf(passwordField1.getPassword());
-        String changelog = textArea1.getText();
-        CurseHandler.ReleaseType t;
-        if (alphaRadioButton1.isSelected()){
-            t = CurseHandler.ReleaseType.ALPHA;
-        }
-        else if (betaRadioButton.isSelected()){
-            t = CurseHandler.ReleaseType.BETA;
-        }
-        else if (RadioType.isSelected()){
-            t = CurseHandler.ReleaseType.RELEASE;
-        }
-        else {
-            t = CurseHandler.ReleaseType.RELEASE;
-        }
-
-        CurseHandler.doCurse(api_key, projectID, changelog, t);
         dispose();
     }
 
@@ -81,8 +51,8 @@ public class CurseSetup extends JDialog {
         dispose();
     }
 
-    public static void show_2(){
-        CurseSetup dialog = new CurseSetup();
+    public static void setup2() {
+        CurseUpdate dialog = new CurseUpdate();
         dialog.pack();
         dialog.setVisible(true);
     }

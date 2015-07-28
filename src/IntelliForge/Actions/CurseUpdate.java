@@ -4,9 +4,12 @@ package IntelliForge.Actions;
 import IntelliForge.CurseSetup;
 import IntelliForge.Helper.ExecuteCommandThread;
 import IntelliForge.Helper.OperatingSystemHelper;
+import com.intellij.dvcs.push.VcsPushAction;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.vcs.actions.CommonCheckinProjectAction;
+import com.intellij.psi.PsiManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,18 +24,12 @@ public class CurseUpdate extends AnAction{
     public void actionPerformed(AnActionEvent t) {
         if(readFile(t.getProject().getBasePath())){
             //Do update only!
+                 // System.out.println("WE HAVE CURSEFORGE!");
+            IntelliForge.CurseUpdate.setup2();
+            new CommonCheckinProjectAction().actionPerformed(t);
         } else{
             //Add plugin to build script
             CurseSetup.show_2();
-            if (IntelliForgeToolWindow.theToolWindow != null){
-                IntelliForgeToolWindow.theToolWindow.activate(new Runnable() {
-                    @Override
-                    public void run() {}});
-            }
-            ExecuteCommandThread e = new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(),
-                    "build curse", t.getData(PlatformDataKeys.PROJECT_FILE_DIRECTORY).getCanonicalPath(),
-                    OperatingSystemHelper.systemHelper.isWindows());
-            e.start();
         }
     }
 
@@ -43,8 +40,10 @@ public class CurseUpdate extends AnAction{
             String line = br.readLine();
 
             while (line != null) {
-                if(line.contains("curseforge"))
+                if(line.contains("curseforge")){
+                    System.out.println(line);
                     return true;
+                }
                 line = br.readLine();
             }
         } catch (IOException e) {e.printStackTrace();}
