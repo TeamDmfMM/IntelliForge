@@ -20,6 +20,7 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         ForgeDev.SetupForge setupForge = new ForgeDev.SetupForge();
         BuildProject.BuildtoCurse buildtoCurse = new BuildProject.BuildtoCurse();
         CurseUpdate Cupdate = new CurseUpdate();
+        UpdateForgeAction Updateforge = new UpdateForgeAction();
 
 
         CurseGroup curse = new CurseGroup();
@@ -31,7 +32,7 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         am.registerAction("IntelliForgesetupForge", setupForge);
         am.registerAction("IntelliForgebuildCurse", buildtoCurse);
         am.registerAction("IntelliForgeCurseUpdate", Cupdate);
-
+        am.registerAction("IntellifForgeupdateforge", Updateforge);
 
         am.registerAction("IntelliForgeGroup", curse);
 
@@ -46,6 +47,7 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         windowM.add(buildProject);
         //windowM.add(buildtoCurse);
         windowM.add(curse);
+        windowM.add(Updateforge);
 
         windowM.addSeparator();
 
