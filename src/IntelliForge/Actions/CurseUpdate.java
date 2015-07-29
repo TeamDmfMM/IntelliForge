@@ -2,18 +2,15 @@ package IntelliForge.Actions;
 
 
 import IntelliForge.CurseSetup;
-import IntelliForge.Helper.ExecuteCommandThread;
-import IntelliForge.Helper.OperatingSystemHelper;
-import com.intellij.dvcs.push.VcsPushAction;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.vcs.actions.CommonCheckinProjectAction;
-import com.intellij.psi.PsiManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+
+//import com.intellij.dvcs.push.VcsPushAction;
 
 public class CurseUpdate extends AnAction{
 
