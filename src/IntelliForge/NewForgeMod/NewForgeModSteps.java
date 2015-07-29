@@ -9,15 +9,18 @@ import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBScrollPane;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.Set;
 
 
 public class NewForgeModSteps extends ModuleWizardStep {
     private static final String MCVERS = "Minecraft: ";
+    private DefaultListModel listModel;
     @Override
     public JComponent getComponent() {
-        ParseCollection p = new ParseCollection(new ParseCollection.VersionPolicy() {
+        final ParseCollection p = new ParseCollection(new ParseCollection.VersionPolicy() {
             @Override
             public boolean downloadMcVersion(String version) {
                 if(version.startsWith("1.6.4")){
@@ -33,7 +36,7 @@ public class NewForgeModSteps extends ModuleWizardStep {
         });
         JPanel jpan = new JPanel();
         JLabel textf1 = new JLabel("Minecraft Version:");
-        JComboBox comboBox = new ComboBox();
+        final JComboBox comboBox = new ComboBox();
         Iterator s = p.getMcVersionsLoaded().iterator();
         while(s.hasNext()){
             comboBox.addItem(MCVERS + ((String)s.next()));
@@ -41,20 +44,25 @@ public class NewForgeModSteps extends ModuleWizardStep {
         //comboBox.addItem(MCVERS + "1.8");
         //comboBox.addItem(MCVERS + "1.7.10");
 
-        DefaultListModel list2 = new DefaultListModel();
+        listModel = new DefaultListModel();
         if(comboBox.getItemAt(comboBox.getSelectedIndex()) != null) {
             Iterator stringgo = p.versions.get("1.8").datas.keySet().iterator();
             while (stringgo.hasNext()) {
-                list2.addElement("Forge:   " + stringgo.next() + "  ");
+                listModel.addElement("Forge:   " + stringgo.next() + "  ");
             }
         }
+        comboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                listModel = updateList(p, comboBox);
+            }
+        });
         //list2.addElement("Testing 2");
         //list2.addElement("Testing 3");
 
 
 
 
-        JList list = new JBList(list2);
+        JList list = new JBList(listModel);
        // jList.setModel();
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
@@ -72,6 +80,17 @@ public class NewForgeModSteps extends ModuleWizardStep {
         jpan.add(new JSeparator(SwingConstants.VERTICAL));
         jpan.add(listScrollPane, BorderLayout.AFTER_LINE_ENDS);
         return jpan;
+    }
+
+    private DefaultListModel updateList(ParseCollection p, JComboBox comboBox) {
+        DefaultListModel list2 = new DefaultListModel();
+        if(comboBox.getItemAt(comboBox.getSelectedIndex()) != null) {
+            Iterator stringgo = p.versions.get("1.8").datas.keySet().iterator();
+            while (stringgo.hasNext()) {
+                list2.addElement("Forge:   " + stringgo.next() + "  ");
+            }
+        }
+        return list2;
     }
 
     @Override
