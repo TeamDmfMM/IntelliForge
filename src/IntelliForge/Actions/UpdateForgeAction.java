@@ -1,6 +1,7 @@
 package IntelliForge.Actions;
 
 import IntelliForge.GetForgeVersionNoJSONCheck;
+import IntelliForge.Helper.ForgeData.ParseCollection;
 import IntelliForge.Helper.PSIHelper;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -19,6 +20,8 @@ public class UpdateForgeAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
 
         String fvers = GetForgeVersionNoJSONCheck.get();
+
+
 
         PSIHelper.edit_field_mcversion(e, fvers);
 
