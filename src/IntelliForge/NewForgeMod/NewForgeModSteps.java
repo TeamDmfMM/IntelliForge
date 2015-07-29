@@ -43,7 +43,7 @@ public class NewForgeModSteps extends ModuleWizardStep {
 
         DefaultListModel list2 = new DefaultListModel();
         if(comboBox.getItemAt(comboBox.getSelectedIndex()) != null) {
-            Iterator stringgo = p.versions.get(comboBox.getItemAt(comboBox.getSelectedIndex())).datas.keySet().iterator();
+            Iterator stringgo = p.versions.get("1.8").datas.keySet().iterator();
             while (stringgo.hasNext()) {
                 list2.addElement("Forge:   " + stringgo.next() + "  ");
             }
