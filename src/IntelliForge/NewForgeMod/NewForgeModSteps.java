@@ -16,56 +16,51 @@ import java.util.Iterator;
 public class NewForgeModSteps extends ModuleWizardStep {
     private static final String MCVERS = "Minecraft: ";
 
-    private ParseCollection c;
+    public ParseCollection c;
 
     private JList l;
+
+    public JProgressBar ptro;
     JComboBox comboBox;
     @Override
     public JComponent getComponent() {
-        ParseCollection p = new ParseCollection(new ParseCollection.VersionPolicy() {
-            @Override
-            public boolean downloadMcVersion(String version) {
-                if(version.startsWith("1.6.4")){
-                    return true;
-                }else if(version.startsWith("1.7")){
-                    return true;
-                }else if(version.startsWith("1.8")){
-                    return true;
-                }else {
-                    return false;
-                }
-            }
-        });
 
-        c = p;
+
+        c = null;
 
         JPanel jpan = new JPanel();
         JLabel textf1 = new JLabel("Minecraft Version:");
         comboBox = new ComboBox();
 
+        JProgressBar probar = new JProgressBar(0, 100);
+        ptro = probar;
 
 
-        Iterator s = p.getMcVersionsLoaded().iterator();
+
+       /* Iterator s = p.getMcVersionsLoaded().iterator();
         while(s.hasNext()){
             comboBox.addItem(MCVERS + ((String)s.next()));
-        }
+        }*/
+
         //comboBox.addItem(MCVERS + "1.8");
         //comboBox.addItem(MCVERS + "1.7.10");
+        /*
+        */
+
 
         DefaultListModel list2 = new DefaultListModel();
-        if(comboBox.getItemAt(comboBox.getSelectedIndex()) != null) {
-            Iterator stringgo = p.versions.get("1.8").datas.keySet().iterator();
-            while (stringgo.hasNext()) {
-                list2.addElement("Forge:   " + stringgo.next() + "  ");
-            }
-        }
+
+
+        /*
+
+        */
         //list2.addElement("Testing 2");
         //list2.addElement("Testing 3");
 
 
 
 
-        JList list = new JBList(list2);
+        JList list = new JBList();
 
         l = list;
 
@@ -73,6 +68,11 @@ public class NewForgeModSteps extends ModuleWizardStep {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DefaultListModel list2 = new DefaultListModel();
+
+                if (c == null){
+                    return;
+                }
+
                 if(comboBox.getItemAt(comboBox.getSelectedIndex()) != null) {
                     Iterator stringgo =c.versions.get(
 
@@ -100,6 +100,7 @@ public class NewForgeModSteps extends ModuleWizardStep {
         listScrollPane.setMinimumSize(new Dimension(50, 30));
 
 
+        ptro.setIndeterminate(true);
 
 
 
@@ -107,11 +108,74 @@ public class NewForgeModSteps extends ModuleWizardStep {
         jpan.add(comboBox);
         jpan.add(new JSeparator(SwingConstants.VERTICAL));
         jpan.add(listScrollPane, BorderLayout.AFTER_LINE_ENDS);
+        jpan.add(ptro);
+
+        (new GetForgeInfoTask(list, comboBox, this)).execute();
+
         return jpan;
     }
 
-    @Override
     public void updateDataModel() {
 
+    }
+
+    public static class GetForgeInfoTask extends SwingWorker<ParseCollection, Object> {
+
+        public JList toAddForge;
+        public JComboBox toAddMc;
+
+        public NewForgeModSteps theoldthing;
+
+        public GetForgeInfoTask(JList toAddForge, JComboBox toAddMc, NewForgeModSteps theoldthing){
+
+            this.toAddForge = toAddForge;
+            this.toAddMc = toAddMc;
+            this.theoldthing = theoldthing;
+        }
+
+
+        @Override
+        protected ParseCollection doInBackground() throws Exception {
+            ParseCollection p = new ParseCollection(new ParseCollection.VersionPolicy() {
+                @Override
+                public boolean downloadMcVersion(String version) {
+                    if(version.startsWith("1.6.4")){
+                        return true;
+                    }else if(version.startsWith("1.7")){
+                        return true;
+                    }else if(version.startsWith("1.8")){
+                        return true;
+                    }else {
+                        return false;
+                    }
+                }
+            });
+
+            Iterator s = p.getMcVersionsLoaded().iterator();
+            while(s.hasNext()){
+                toAddMc.addItem(MCVERS + ((String) s.next()));
+            }
+
+            DefaultListModel list2 = new DefaultListModel();
+
+            if(toAddMc.getItemAt(toAddMc.getSelectedIndex()) != null) {
+                Iterator stringgo = p.versions.get("1.8").datas.keySet().iterator();
+                while (stringgo.hasNext()) {
+                    list2.addElement("Forge:   " + stringgo.next() + "  ");
+                }
+            }
+
+            toAddForge.setModel(list2);
+
+            theoldthing.c = p;
+            theoldthing.ptro.hide();
+
+            return p;
+
+            //comboBox.addItem(MCVERS + "1.8");
+            //comboBox.addItem(MCVERS + "1.7.10");
+
+
+        }
     }
 }
