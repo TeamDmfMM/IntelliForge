@@ -6,10 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by mincrmatt12. Do not copy this or you will have to face
@@ -17,7 +14,7 @@ import java.util.Map;
  */
 public class Parser {
 
-    public Map<String, BuildData> datas = new HashMap<>();
+    public Map<String, BuildData> datas = new LinkedHashMap<>();
 
     public String version;
 
@@ -32,6 +29,8 @@ public class Parser {
 
 
         JsonParser jsonParser = new JsonParser();
+
+
 
         JsonObject rootObj = jsonParser.parse(in).getAsJsonObject();
 
@@ -76,6 +75,8 @@ public class Parser {
         JsonArray versions = techRootOnj.getAsJsonArray("versions");
         Iterator<JsonElement> versionsiter = versions.iterator();
 
+        ArrayList<BuildData> bdatasTemp = new ArrayList<>();
+
         while (versionsiter.hasNext()) {
             JsonElement jsonElement = versionsiter.next();
             JsonObject theVersion = jsonElement.getAsJsonObject();
@@ -115,8 +116,14 @@ public class Parser {
 
             }
 
-            this.datas.put(dta.version, dta);
+            bdatasTemp.add(dta);
 
+        }
+
+        Collections.sort(bdatasTemp);
+
+        for (BuildData bdata : bdatasTemp){
+            datas.put(bdata.version, bdata);
         }
 
 
