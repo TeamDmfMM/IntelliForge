@@ -1,6 +1,7 @@
 package IntelliForge;
 
 import IntelliForge.Actions.*;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.components.ApplicationComponent;
@@ -19,7 +20,7 @@ public class IntelliForgePluginRegex implements ApplicationComponent{
         ForgeDev.GenPatches patches = new ForgeDev.GenPatches();
         ForgeDev.SetupForge setupForge = new ForgeDev.SetupForge();
         BuildProject.BuildtoCurse buildtoCurse = new BuildProject.BuildtoCurse();
-        CurseUpdate Cupdate = new CurseUpdate();
+        IntelliForge.Actions.CurseUpdate Cupdate = new IntelliForge.Actions.CurseUpdate();
         UpdateForgeAction Updateforge = new UpdateForgeAction();
 
 
