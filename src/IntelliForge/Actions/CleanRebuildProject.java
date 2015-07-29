@@ -2,6 +2,7 @@ package IntelliForge.Actions;
 
 
 import IntelliForge.Helper.ExecuteCommandThread;
+import IntelliForge.Helper.ForgeData.ParseCollection;
 import IntelliForge.Helper.MultipleExecuteCommandThread;
 import IntelliForge.Helper.OperatingSystemHelper;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -18,6 +19,13 @@ public class CleanRebuildProject extends AnAction{
 
     @Override
     public void actionPerformed(AnActionEvent event) {
+
+        ParseCollection c = new ParseCollection(new ParseCollection.VersionPolicy() {
+            @Override
+            public boolean downloadMcVersion(String version) {
+                return true;
+            }
+        });
 
         if (IntelliForgeToolWindow.theToolWindow != null){
             IntelliForgeToolWindow.theToolWindow.activate(new Runnable() {

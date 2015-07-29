@@ -4,7 +4,7 @@ package IntelliForge.Helper.ForgeData;
  * Created by mincrmatt12. Do not copy this or you will have to face
  * our legal team. (dmf444)
  */
-public class BuildData {
+public class BuildData implements Comparable<BuildData> {
 
     public String downloadLink = "";
 
@@ -18,4 +18,8 @@ public class BuildData {
 
     public boolean isLatest;
 
+    @Override
+    public int compareTo(BuildData o) {
+        return o.bid - bid;
+    }
 }
