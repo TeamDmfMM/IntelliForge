@@ -22,6 +22,12 @@ public class NewForgeModSteps extends ModuleWizardStep {
 
     public JProgressBar ptro;
     JComboBox comboBox;
+    private NewForgeModBuilder build;
+
+
+    public NewForgeModSteps(NewForgeModBuilder builder){
+        this.build = builder;
+    }
     @Override
     public JComponent getComponent() {
 
@@ -32,10 +38,12 @@ public class NewForgeModSteps extends ModuleWizardStep {
         JLabel textf1 = new JLabel("Minecraft Version:");
         comboBox = new ComboBox();
 
+        JLabel textLoad = new JLabel("Loading Forge Versions");
         JProgressBar probar = new JProgressBar(0, 100);
         ptro = probar;
 
-
+        textf1.setVisible(false);
+        comboBox.setVisible(false);
 
        /* Iterator s = p.getMcVersionsLoaded().iterator();
         while(s.hasNext()){
@@ -46,7 +54,6 @@ public class NewForgeModSteps extends ModuleWizardStep {
         //comboBox.addItem(MCVERS + "1.7.10");
         /*
         */
-
 
         DefaultListModel list2 = new DefaultListModel();
 
@@ -116,7 +123,8 @@ public class NewForgeModSteps extends ModuleWizardStep {
     }
 
     public void updateDataModel() {
-
+        build.setMC(((String)comboBox.getSelectedItem()).substring(((String)comboBox.getSelectedItem()).indexOf(":") + 2));
+        build.setVersion(((String) l.getSelectedValue()).split(":")[1]);
     }
 
     public static class GetForgeInfoTask extends SwingWorker<ParseCollection, Object> {
@@ -135,6 +143,7 @@ public class NewForgeModSteps extends ModuleWizardStep {
 
 
         @Override
+        @SuppressWarnings("Exeption")
         protected ParseCollection doInBackground() throws Exception {
             ParseCollection p = new ParseCollection(new ParseCollection.VersionPolicy() {
                 @Override
@@ -161,7 +170,7 @@ public class NewForgeModSteps extends ModuleWizardStep {
             if(toAddMc.getItemAt(toAddMc.getSelectedIndex()) != null) {
                 Iterator stringgo = p.versions.get("1.8").datas.keySet().iterator();
                 while (stringgo.hasNext()) {
-                    list2.addElement("Forge:   " + stringgo.next() + "  ");
+                    list2.addElement("Forge:   " + stringgo.next());
                 }
             }
 
@@ -169,6 +178,13 @@ public class NewForgeModSteps extends ModuleWizardStep {
 
             theoldthing.c = p;
             theoldthing.ptro.hide();
+
+            if(!toAddMc.isVisible()){
+                toAddMc.setVisible(true);
+            }
+            if(!toAddForge.isVisible()){
+                toAddForge.setVisible(true);
+            }
 
             return p;
 
