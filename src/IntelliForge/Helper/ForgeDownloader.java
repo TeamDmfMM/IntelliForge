@@ -10,7 +10,6 @@ public class ForgeDownloader {
     public static void downloadForge(String versionMaj, String versionMin){
 
 
-
     }
 
 

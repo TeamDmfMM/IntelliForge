@@ -6,11 +6,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 /**
  * Created by David on 24/07/2015.
  */
@@ -25,7 +20,9 @@ public class ForgeDev{
             String project = event.getData(PlatformDataKeys.PROJECT).getBaseDir().getCanonicalPath();
 
             ExecuteCommandThread th = new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "genPatches", project, OperatingSystemHelper.systemHelper.isWindows());
-            th.start();
+            //th.start();
+
+            System.out.println( event.getData(PlatformDataKeys.PROJECT_FILE_DIRECTORY).getCanonicalPath());
         }
     }
 

@@ -1,13 +1,11 @@
 package IntelliForge.NewForgeMod;
 
-import IntelliForge.Actions.IntelliForgeToolWindow;
 import IntelliForge.Helper.ExecuteCommandThread;
 import IntelliForge.Helper.ForgeData.BuildData;
 import IntelliForge.Helper.ForgeData.ParseCollection;
 import IntelliForge.Helper.MultipleExecuteCommandThread;
 import IntelliForge.Helper.OperatingSystemHelper;
 import IntelliForge.Helper.Unzip;
-import IntelliForge.NewForgeMod.NewForgeMod;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
@@ -17,17 +15,13 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.xml.actions.xmlbeans.FileUtils;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.text.BadLocationException;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
+import java.io.*;
 import java.net.URL;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Created by David on 27/07/2015.
@@ -44,6 +38,9 @@ public class NewForgeModBuilder extends ModuleBuilder implements ModuleBuilderLi
 
     @Override
     public void setupRootModel(ModifiableRootModel modifiableRootModel) throws ConfigurationException {
+
+        System.out.println(modifiableRootModel.getContentEntries());
+
        // System.out.println("setupRootModel");
        // modifiableRootModel.getProject().getBaseDir().getCanonicalPath();
 
@@ -70,6 +67,10 @@ public class NewForgeModBuilder extends ModuleBuilder implements ModuleBuilderLi
 
     @Override
     public void moduleCreated(Module module) {
+
+        this.deleteModuleFile(module.getModuleFilePath());
+
+
        // System.out.print(MC + "\n");
        // System.out.print(Version + "\n");
        // System.out.println(module.getProject().getBaseDir().getCanonicalPath());
@@ -97,16 +98,22 @@ public class NewForgeModBuilder extends ModuleBuilder implements ModuleBuilderLi
         }
 
         try {
-            Unzip.unzip(module.getProject().getBaseDir().getCanonicalPath() + "/forge.zip", module.getProject().getBaseDir().getCanonicalPath());
+            new File(module.getProject().getBaseDir().getCanonicalPath() + "/" + new File(module.getProject().getBaseDir().getCanonicalPath()).getName()).mkdir();
+            Unzip.unzip(module.getProject().getBaseDir().getCanonicalPath() + "/forge.zip", module.getProject().getBaseDir().getCanonicalPath() + "/" + new File(module.getProject().getBaseDir().getCanonicalPath()).getName());
+
         } catch (IOException e) {e.printStackTrace();}
         //System.out.println("I think i finished!");
 
 
-        ExecuteCommandThread a = new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "setupDecompWorkspace", module.getProject().getBaseDir().getCanonicalPath(), OperatingSystemHelper.systemHelper.isWindows());
-        a.start();
-        executeCMD(OperatingSystemHelper.systemHelper.getOSexecuteString(), "idea", module.getProject().getBaseDir().getCanonicalPath(), OperatingSystemHelper.systemHelper.isWindows());
+        MultipleExecuteCommandThread a = new MultipleExecuteCommandThread(new Thing(module.getModuleFile(), module.getProject().getBaseDir().getCanonicalPath(), module.getProject().getBaseDir().getCanonicalPath() + "/" + new File(module.getProject().getBaseDir().getCanonicalPath()).getName()), new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "setupDecompWorkspace", module.getProject().getBaseDir().getCanonicalPath() + "/" + new File(module.getProject().getBaseDir().getCanonicalPath()).getName(), OperatingSystemHelper.systemHelper.isWindows()),
 
-        try {
+        new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "idea", module.getProject().getBaseDir().getCanonicalPath() + "/" + new File(module.getProject().getBaseDir().getCanonicalPath()).getName(), OperatingSystemHelper.systemHelper.isWindows()));
+        a.start();
+
+
+
+
+        /*try {
             Files.delete(new File(module.getProject().getBaseDir().getCanonicalPath() + "/.idea").toPath());
             PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:*.{iml, ipr, iws}");
             Path newbie = new File(module.getProject().getBaseDir().getCanonicalPath()).toPath();
@@ -116,7 +123,7 @@ public class NewForgeModBuilder extends ModuleBuilder implements ModuleBuilderLi
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
@@ -129,5 +136,67 @@ public class NewForgeModBuilder extends ModuleBuilder implements ModuleBuilderLi
             p =  Runtime.getRuntime().exec(osCMD + " " + cmd, null, new File(FileLoc));
             p.waitFor();
         } catch (IOException | InterruptedException e) {}
+    }
+
+    private static class Thing implements Runnable {
+
+        public void copyDirectory(File sourceLocation , File targetLocation)
+                throws IOException {
+
+            if (sourceLocation.isDirectory()) {
+                if (!targetLocation.exists()) {
+                    targetLocation.mkdir();
+                }
+
+                String[] children = sourceLocation.list();
+                for (int i=0; i<children.length; i++) {
+                    copyDirectory(new File(sourceLocation, children[i]),
+                            new File(targetLocation, children[i]));
+                }
+            } else {
+
+                InputStream in = new FileInputStream(sourceLocation);
+                OutputStream out = new FileOutputStream(targetLocation);
+
+                // Copy the bits from instream to outstream
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                in.close();
+                out.close();
+            }
+        }
+
+        VirtualFile ff;
+
+        File t;
+        File f;
+
+        public Thing(VirtualFile f, String t, String fff){
+
+            ff =f ;
+
+            this.t = new File(t);
+            this.f = new File(fff);
+
+
+        }
+
+
+        @Override
+        public void run() {
+
+
+            try {
+                copyDirectory(f, t);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
     }
 }
