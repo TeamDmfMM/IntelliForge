@@ -7,15 +7,17 @@ import IntelliForge.Helper.MultipleExecuteCommandThread;
 import IntelliForge.Helper.OperatingSystemHelper;
 import IntelliForge.Helper.Unzip;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
-import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.module.Module;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -192,17 +194,64 @@ public class NewForgeModBuilder extends ModuleBuilder {//implements ModuleBuilde
                 }
             } else {
 
-                InputStream in = new FileInputStream(sourceLocation);
-                OutputStream out = new FileOutputStream(targetLocation);
+                if (sourceLocation.getName().matches("((.*)\\.iml)|((.*)\\.ipr)|((.*)\\.iws)")){
+                    VirtualFile theDestination = LocalFileSystem.getInstance().findFileByIoFile(targetLocation);
+                    BufferedReader in = new BufferedReader(new FileReader(sourceLocation));
 
-                // Copy the bits from instream to outstream
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
+
+                    // Copy the bits from instream to outstream
+
+                    String line;
+
+                    String d = "";
+
+                    while ((line = in.readLine()) != null){
+                        d = d + line;
+                    }
+
+
+                    final String content = d;
+
+                    final Document t = FileDocumentManager.getInstance().getDocument(theDestination);
+
+                    final Runnable doStuff = new Runnable() {
+                        @Override
+                        public void run() {
+                            t.setText(content);
+                        }
+                    };
+
+
+
+                   ApplicationManager.getApplication().invokeLater(new Runnable() {
+                       @Override
+                       public void run() {
+                           ApplicationManager.getApplication().runWriteAction(doStuff);
+                       }
+                   });
+
+
+
+
+
+
                 in.close();
-                out.close();
+
+                }
+                else {
+
+                    InputStream in = new FileInputStream(sourceLocation);
+                    OutputStream out = new FileOutputStream(targetLocation);
+
+                    // Copy the bits from instream to outstream
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+                    in.close();
+                    out.close();
+                }
             }
         }
 
