@@ -63,8 +63,9 @@ public class CurseHandler {
                     """
             releaseType = "release"
         }*/
-        //StatusBar statusBar = WindowManager.getInstance().getStatusBar(DataKeys.PROJECT.getData(DataManager.getInstance().getDataContext()));
-        //  JBPopupFactory.getInstance().createHtmlTextBalloonBuilder("Recreating build.gradle, adding Curseforge plugin", MessageType.INFO, null).setFadeoutTime(7500).createBalloon().show(RelativePoint.getCenterOf(statusBar.getComponent()), Balloon.Position.atRight);
+
+        StatusBar statusBar = WindowManager.getInstance().getStatusBar(ProjectManager.getInstance().getOpenProjects()[0]);
+        JBPopupFactory.getInstance().createHtmlTextBalloonBuilder("Recreating build.gradle, adding Curseforge plugin", MessageType.INFO, null).setFadeoutTime(7500).createBalloon().show(RelativePoint.getCenterOf(statusBar.getComponent()), Balloon.Position.atRight);
 
         List<String> curse = new ArrayList<>();
         curse.add("\n");
