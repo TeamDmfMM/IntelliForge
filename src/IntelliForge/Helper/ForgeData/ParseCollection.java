@@ -45,7 +45,11 @@ public class ParseCollection {
 
     public BuildData getVersion(String forgeVersion ) {
 
+        forgeVersion = forgeVersion.trim();
+
         for (Parser b : this.versions.values()){
+
+
 
             if (b.datas.containsKey(forgeVersion)){
                 return b.datas.get(forgeVersion);
