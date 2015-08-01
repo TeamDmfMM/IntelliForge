@@ -172,5 +172,9 @@ public class CurseHandler {
             e.printStackTrace();
         }
 
+        ExecuteCommandThread e = new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(),
+                "build curse", project.getBaseDir().getCanonicalPath(), OperatingSystemHelper.systemHelper.isWindows());
+        //     System.out.println("HACKYSTARTERS");
+        e.start();
     }
 }
