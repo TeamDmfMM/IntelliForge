@@ -24,6 +24,10 @@ public class NewForgeModSteps extends ModuleWizardStep {
     JComboBox comboBox;
     private NewForgeModBuilder build;
 
+    public JLabel textff;
+
+    public JLabel loading;
+
 
     public NewForgeModSteps(NewForgeModBuilder builder){
         this.build = builder;
@@ -35,10 +39,22 @@ public class NewForgeModSteps extends ModuleWizardStep {
         c = null;
 
         JPanel jpan = new JPanel();
+
+        GroupLayout layout = new GroupLayout(jpan);
+
         JLabel textf1 = new JLabel("Minecraft Version:");
+        JLabel infoMessage = new JLabel("Warning: Using a .idea project does not fully work yet. ");
+        JLabel info2 = new JLabel("If you do this, please use the forge setup inside of the folder with the same name as your project. ");
+        JLabel info3 = new JLabel("To use .ipr, on the next screen, click advanced, and change the project type to .ipr");
         comboBox = new ComboBox();
 
+        textff = textf1;
+
+
+
         JLabel textLoad = new JLabel("Loading Forge Versions");
+
+        loading = textLoad;
         JProgressBar probar = new JProgressBar(0, 100);
         ptro = probar;
 
@@ -111,11 +127,62 @@ public class NewForgeModSteps extends ModuleWizardStep {
 
 
 
-        jpan.add(textf1);
+       /* jpan.add(textf1);
+        jpan.add(textLoad);
         jpan.add(comboBox);
         jpan.add(new JSeparator(SwingConstants.VERTICAL));
         jpan.add(listScrollPane, BorderLayout.AFTER_LINE_ENDS);
         jpan.add(ptro);
+        jpan.add(infoMessage);
+        jpan.add(info2);
+        jpan.add(info3);*/
+
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+
+        layout.setHorizontalGroup(
+                layout.createSequentialGroup()
+                        .addComponent(textf1)
+                        .addGroup(
+                                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(comboBox)
+                                    .addComponent(listScrollPane)
+                                    .addGroup(
+                                            layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                                .addComponent(infoMessage)
+                                                .addComponent(info2)
+                                                .addComponent(info3)
+                                                .addComponent(ptro)
+                                                .addComponent(textLoad)
+                                    )
+
+                        )
+
+
+        );
+
+        layout.setVerticalGroup(
+
+                layout.createSequentialGroup()
+                        .addGroup(
+                                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(textf1)
+                                        .addComponent(comboBox)
+                        )
+                        .addComponent(listScrollPane)
+                        .addComponent(textLoad)
+                        .addComponent(ptro)
+                        .addComponent(infoMessage)
+                        .addComponent(info2)
+                        .addComponent(info3)
+
+
+        );
+
+        layout.linkSize(SwingConstants.VERTICAL, comboBox, info2);
+        layout.linkSize(SwingConstants.HORIZONTAL, listScrollPane, info2);
+
+        jpan.setLayout(layout);
 
         (new GetForgeInfoTask(list, comboBox, this)).execute();
 
@@ -185,6 +252,9 @@ public class NewForgeModSteps extends ModuleWizardStep {
             if(!toAddForge.isVisible()){
                 toAddForge.setVisible(true);
             }
+
+            theoldthing.loading.setVisible(false);
+            theoldthing.textff.setVisible(true);
 
             return p;
 

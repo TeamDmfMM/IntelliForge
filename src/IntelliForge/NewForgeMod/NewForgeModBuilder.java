@@ -194,7 +194,7 @@ public class NewForgeModBuilder extends ModuleBuilder {//implements ModuleBuilde
                 }
             } else {
 
-                if (sourceLocation.getName().matches("((.*)\\.iml)|((.*)\\.ipr)|((.*)\\.iws)")){
+                if (sourceLocation.getName().matches("((.*)\\.iml)|((.*)\\.ipr)|((.*)\\.iws)") && targetLocation.exists()){
                     VirtualFile theDestination = LocalFileSystem.getInstance().findFileByIoFile(targetLocation);
                     BufferedReader in = new BufferedReader(new FileReader(sourceLocation));
 
@@ -229,10 +229,6 @@ public class NewForgeModBuilder extends ModuleBuilder {//implements ModuleBuilde
                            ApplicationManager.getApplication().runWriteAction(doStuff);
                        }
                    });
-
-
-
-
 
 
                 in.close();
@@ -283,12 +279,17 @@ public class NewForgeModBuilder extends ModuleBuilder {//implements ModuleBuilde
         @Override
         public void run() {
 
+            if (new File(t,".idea").exists()){
+                new File(t, ".idea").delete();
+            }
 
             try {
                 copyDirectory(f, t);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
 
 
 
