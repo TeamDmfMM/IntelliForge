@@ -1,5 +1,6 @@
 package IntelliForge.NewForgeMod;
 
+import IntelliForge.Helper.ForgeData.BuildData;
 import IntelliForge.Helper.ForgeData.ParseCollection;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.ui.ComboBox;
@@ -17,16 +18,16 @@ public class NewForgeModSteps extends ModuleWizardStep {
     private static final String MCVERS = "Minecraft: ";
 
     public ParseCollection c;
-
-    private JList l;
-
-    public JProgressBar ptro;
-    JComboBox comboBox;
     private NewForgeModBuilder build;
 
+    private JList l;
+    public JProgressBar ptro;
+    JComboBox comboBox;
     public JLabel textff;
-
     public JLabel loading;
+    public JButton recomend;
+    public JButton latest;
+    JScrollPane listScrollPane;
 
 
     public NewForgeModSteps(NewForgeModBuilder builder){
@@ -47,7 +48,8 @@ public class NewForgeModSteps extends ModuleWizardStep {
         JLabel info2 = new JLabel("If you do this, please use the forge setup inside of the folder with the same name as your project. ");
         JLabel info3 = new JLabel("To use .ipr, on the next screen, click advanced, and change the project type to .ipr");
         comboBox = new ComboBox();
-
+        recomend = new JButton("Recommended Build");
+        latest = new JButton("Latest Build");
         textff = textf1;
 
 
@@ -60,25 +62,8 @@ public class NewForgeModSteps extends ModuleWizardStep {
 
         textf1.setVisible(false);
         comboBox.setVisible(false);
-
-       /* Iterator s = p.getMcVersionsLoaded().iterator();
-        while(s.hasNext()){
-            comboBox.addItem(MCVERS + ((String)s.next()));
-        }*/
-
-        //comboBox.addItem(MCVERS + "1.8");
-        //comboBox.addItem(MCVERS + "1.7.10");
-        /*
-        */
-
-        DefaultListModel list2 = new DefaultListModel();
-
-
-        /*
-
-        */
-        //list2.addElement("Testing 2");
-        //list2.addElement("Testing 3");
+        recomend.setVisible(false);
+        latest.setVisible(false);
 
 
 
@@ -114,18 +99,34 @@ public class NewForgeModSteps extends ModuleWizardStep {
             }
         });
 
+
        // jList.setModel();
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         //list.addListSelectionListener(this);
         list.setVisibleRowCount(5);
-        JScrollPane listScrollPane = new JBScrollPane(list);
+        listScrollPane = new JBScrollPane(list);
         listScrollPane.setMinimumSize(new Dimension(50, 30));
 
 
         ptro.setIndeterminate(true);
 
+        recomend.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BuildData buildData = c.getRecommended(((String) comboBox.getSelectedItem()).substring(((String) comboBox.getSelectedItem()).indexOf(":") + 2));
+                l.setSelectedValue("Forge:   " + buildData.version, true);
 
+            }
+        });
+        latest.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BuildData buildData = c.getLatest(((String) comboBox.getSelectedItem()).substring(((String) comboBox.getSelectedItem()).indexOf(":") + 2));
+                l.setSelectedValue("Forge:   " + buildData.version, true);
+
+            }
+        });
 
        /* jpan.add(textf1);
         jpan.add(textLoad);
@@ -145,16 +146,18 @@ public class NewForgeModSteps extends ModuleWizardStep {
                         .addComponent(textf1)
                         .addGroup(
                                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                    .addComponent(comboBox)
-                                    .addComponent(listScrollPane)
-                                    .addGroup(
-                                            layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                                .addComponent(infoMessage)
-                                                .addComponent(info2)
-                                                .addComponent(info3)
-                                                .addComponent(ptro)
-                                                .addComponent(textLoad)
-                                    )
+                                        .addComponent(recomend)
+                                        .addComponent(comboBox)
+                                        .addComponent(listScrollPane)
+                                        .addGroup(
+                                                layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                                        .addComponent(latest)
+                                                        .addComponent(infoMessage)
+                                                        .addComponent(info2)
+                                                        .addComponent(info3)
+                                                        .addComponent(ptro)
+                                                        .addComponent(textLoad)
+                                        )
 
                         )
 
@@ -168,8 +171,13 @@ public class NewForgeModSteps extends ModuleWizardStep {
                                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(textf1)
                                         .addComponent(comboBox)
+
                         )
                         .addComponent(listScrollPane)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(recomend)
+                                        .addComponent(latest)
+                        )
                         .addComponent(textLoad)
                         .addComponent(ptro)
                         .addComponent(infoMessage)
@@ -255,6 +263,8 @@ public class NewForgeModSteps extends ModuleWizardStep {
 
             theoldthing.loading.setVisible(false);
             theoldthing.textff.setVisible(true);
+            theoldthing.recomend.setVisible(true);
+            theoldthing.latest.setVisible(true);
 
             return p;
 

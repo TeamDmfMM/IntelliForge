@@ -1,24 +1,36 @@
 package IntelliForge.NewForgeMod;
 
+import IntelliForge.Actions.IntelliForgeToolWindow;
 import IntelliForge.Helper.ExecuteCommandThread;
 import IntelliForge.Helper.ForgeData.BuildData;
 import IntelliForge.Helper.ForgeData.ParseCollection;
 import IntelliForge.Helper.MultipleExecuteCommandThread;
 import IntelliForge.Helper.OperatingSystemHelper;
 import IntelliForge.Helper.Unzip;
+import IntelliForge.IntelliForgePluginRegex;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
+import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.ui.MessageType;
+import com.intellij.openapi.ui.popup.Balloon;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.wm.StatusBar;
+import com.intellij.openapi.wm.WindowManager;
+import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,13 +42,13 @@ import java.nio.file.StandardCopyOption;
 /**
  * Created by David on 27/07/2015.
  */
-public class NewForgeModBuilder extends ModuleBuilder {//implements ModuleBuilderListener
+public class NewForgeModBuilder extends ModuleBuilder implements ModuleBuilderListener {//
 
     private String Version;
     private String MC;
 
     public NewForgeModBuilder(){
-       // addListener(this);
+        addListener(this);
     }
 
 
@@ -85,7 +97,6 @@ public class NewForgeModBuilder extends ModuleBuilder {//implements ModuleBuilde
             } catch (IOException e) {e.printStackTrace();}
             //System.out.println("I think i finished!");
 
-
             MultipleExecuteCommandThread a = new MultipleExecuteCommandThread(
                     new Thing(basedir, basedir.getCanonicalPath(), basedir.getCanonicalPath() + "/" + new File(basedir.getCanonicalPath()).getName()),
                     new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "setupDecompWorkspace", basedir.getCanonicalPath() + "/" + new File(basedir.getCanonicalPath()).getName(), OperatingSystemHelper.systemHelper.isWindows()),
@@ -113,68 +124,12 @@ public class NewForgeModBuilder extends ModuleBuilder {//implements ModuleBuilde
         return new NewForgeModSteps(this);
     }
 
-    /*@Override
+    @Override
     public void moduleCreated(Module module) {
-
-        this.deleteModuleFile(module.getModuleFilePath());
-
-
-       // System.out.print(MC + "\n");
-       // System.out.print(Version + "\n");
-       // System.out.println(module.getProject().getBaseDir().getCanonicalPath());
-        ParseCollection p = new ParseCollection(new ParseCollection.VersionPolicy() {
-            @Override
-            public boolean downloadMcVersion(String version) {
-                if(version.startsWith("1.6.4")){
-                    return true;
-                }else if(version.startsWith("1.7")){
-                    return true;
-                }else if(version.startsWith("1.8")){
-                    return true;
-                }else {
-                    return false;
-                }
-            }
-        });
-        BuildData BD = p.getVersion(Version);
-        String downloadLink = BD.downloadLink;
-        try {
-            URL website = new URL("http://" + downloadLink);
-            Files.copy(website.openStream(), new File(module.getProject().getBaseDir().getCanonicalPath(),  "forge.zip").toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            new File(module.getProject().getBaseDir().getCanonicalPath() + "/" + new File(module.getProject().getBaseDir().getCanonicalPath()).getName()).mkdir();
-            Unzip.unzip(module.getProject().getBaseDir().getCanonicalPath() + "/forge.zip", module.getProject().getBaseDir().getCanonicalPath() + "/" + new File(module.getProject().getBaseDir().getCanonicalPath()).getName());
-
-        } catch (IOException e) {e.printStackTrace();}
-        //System.out.println("I think i finished!");
-
-
-        MultipleExecuteCommandThread a = new MultipleExecuteCommandThread(
-                new Thing(module.getModuleFile(), module.getProject().getBaseDir().getCanonicalPath(), module.getProject().getBaseDir().getCanonicalPath() + "/" + new File(module.getProject().getBaseDir().getCanonicalPath()).getName()),
-                new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "setupDecompWorkspace", module.getProject().getBaseDir().getCanonicalPath() + "/" + new File(module.getProject().getBaseDir().getCanonicalPath()).getName(), OperatingSystemHelper.systemHelper.isWindows()),
-                new ExecuteCommandThread(OperatingSystemHelper.systemHelper.getOSexecuteString(), "idea", module.getProject().getBaseDir().getCanonicalPath() + "/" + new File(module.getProject().getBaseDir().getCanonicalPath()).getName(), OperatingSystemHelper.systemHelper.isWindows()));
-        a.start();
-
-
-
-
-        /*try {
-            Files.delete(new File(module.getProject().getBaseDir().getCanonicalPath() + "/.idea").toPath());
-            PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:*.{iml, ipr, iws}");
-            Path newbie = new File(module.getProject().getBaseDir().getCanonicalPath()).toPath();
-            if (matcher.matches(newbie)){
-                Files.delete(newbie);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }*/
+        StatusBar statusBar = WindowManager.getInstance().getStatusBar(module.getProject());
+        JBPopupFactory.getInstance().createHtmlTextBalloonBuilder("\n" + "Setting up workspace. Do not do anything until Intellij reloads the project. This may take a while" + "\n", MessageType.INFO, null)
+                .setFadeoutTime(7500).createBalloon().show(RelativePoint.getCenterOf(statusBar.getComponent()), Balloon.Position.atRight);
+    }
 
 
     private static class Thing implements Runnable {

@@ -32,7 +32,7 @@ public class NewForgeMod extends ModuleType<NewForgeModBuilder> {
     @NotNull
     @Override
     public String getName() {
-        return "New Minecraft Forge Mod";
+        return "Minecraft Forge Mod";
     }
 
     @NotNull
