@@ -88,7 +88,7 @@ public class NewForgeModSteps extends ModuleWizardStep {
 
                     ).datas.keySet().iterator();
                     while (stringgo.hasNext()) {
-                        list2.addElement("Forge:   " + stringgo.next() + "  ");
+                        list2.addElement("Forge:   " + stringgo.next());
                     }
                 }
 
